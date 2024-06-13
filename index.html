@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notion Page Access</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="container">
+        <h1>Welcome to My Notion Page</h1>
+        <button id="accessButton">Access Notion Page</button>
+    </div>
+
+    <div id="passwordModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Enter Password:</p>
+            <input type="password" id="passwordInput">
+            <button id="submitPassword">Submit</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('accessButton').onclick = function() {
+            document.getElementById('passwordModal').style.display = 'flex';
+        };
+
+        document.querySelector('.close').onclick = function() {
+            document.getElementById('passwordModal').style.display = 'none';
+        };
+
+        document.getElementById('submitPassword').onclick = function() {
+            var password = document.getElementById('passwordInput').value;
+            fetch('/.netlify/functions/verify-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ password: password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.valid) {
+                    window.location.href = 'https://www.notion.so/oralcoder/Course-0bb80081a36f4f208bd20d810e061d43';
+                } else {
+                    alert('Incorrect password, please try again.');
+                }
+            });
+        };
+    </script>
+</body>
+</html>
